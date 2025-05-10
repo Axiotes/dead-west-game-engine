@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
 
     void StartGame()
     {
+        var spawner = zombieSpawner.GetComponent<ZombieSpawner>();
+        spawner.ResetSpawner();
         isPlaying = true;
         bgInitial.SetActive(false);
         uiInitial.SetActive(false);
@@ -50,11 +52,23 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDead()
     {
-        // Para lógica de zumbis
+        // Para de spawnar novos zumbis
         zombieSpawner.SetActive(false);
+
+        // Remove todos os zumbis atualmente na cena
+        GameObject[] allZombies = GameObject.FindGameObjectsWithTag("Zombie");
+        foreach (GameObject z in allZombies)
+        {
+            Destroy(z);
+        }
+
+        // Animação de morte do jogador
         player.Die();
+
+        // Transição para Game Over
         StartCoroutine(ShowGameOver());
     }
+
 
     IEnumerator ShowGameOver()
     {

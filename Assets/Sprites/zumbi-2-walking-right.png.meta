@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      zumbi-2-walking-right_0: 3569205349322012151
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
