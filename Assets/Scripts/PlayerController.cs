@@ -3,7 +3,16 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movimentação")]
     public float moveSpeed = 5f;
+
+    [Header("Limites do Cenário")]
+    public float minX = -8f;
+    public float maxX = 8f;
+    public float minY = -4f;
+    public float maxY = 4f;
+
+    [Header("Tiro")]
     public GameObject bulletPrefab;
     public Transform firePoint;
     public float fireRate = 0.5f;
@@ -12,7 +21,10 @@ public class PlayerController : MonoBehaviour
     private bool canShoot = true;
     private GameManager manager;
     private int currentLives = 3;
+
+    // Eixos
     private float h;
+    private float v;
 
     void Awake()
     {
@@ -23,7 +35,10 @@ public class PlayerController : MonoBehaviour
     {
         manager = gm;
         currentLives = 3;
+        // Volta para o centro ou posição inicial
         transform.position = Vector3.zero;
+
+        // Reset de parâmetros de animação
         anim.SetFloat("SpeedX", 0f);
         anim.SetBool("IsShooting", false);
         anim.ResetTrigger("TakeDamage");
@@ -32,6 +47,7 @@ public class PlayerController : MonoBehaviour
 
     public void ResetPlayer()
     {
+        // Mesmo reset de animações
         anim.SetFloat("SpeedX", 0f);
         anim.SetBool("IsShooting", false);
         anim.ResetTrigger("TakeDamage");
@@ -40,19 +56,28 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Move();
+        // Captura os inputs
+        h = Input.GetAxisRaw("Horizontal");
+        v = Input.GetAxisRaw("Vertical");
+
+        // Disparo
         if (Input.GetKeyDown(KeyCode.Space) && canShoot)
-        {
             StartCoroutine(Shoot());
-        }
     }
 
-    void Move()
+    void FixedUpdate()
     {
-        h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        // Move o player
         Vector3 dir = new Vector3(h, v, 0).normalized;
-        transform.Translate(dir * moveSpeed * Time.deltaTime);
+        transform.Translate(dir * moveSpeed * Time.fixedDeltaTime);
+
+        // Aplica clamp para limitar posição dentro dos bounds
+        Vector3 p = transform.position;
+        p.x = Mathf.Clamp(p.x, minX, maxX);
+        p.y = Mathf.Clamp(p.y, minY, maxY);
+        transform.position = p;
+
+        // Atualiza parâmetro de animação
         anim.SetFloat("SpeedX", h);
     }
 
@@ -60,16 +85,15 @@ public class PlayerController : MonoBehaviour
     {
         canShoot = false;
         anim.Play("Shoot");
-        
-        // Instancia a bala e chama o método Init para definir a direção
+
+        // Instancia a bala e define direção
         GameObject b = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Bullet bullet = b.GetComponent<Bullet>();
         if (bullet != null)
-        {
-            bullet.Init(this); // Passa o player para definir a direção
-        }
+            bullet.Init(this);
 
-        yield return new WaitForSeconds(fireRate); 
+        yield return new WaitForSeconds(fireRate);
+
         anim.Play("Idle");
         canShoot = true;
     }
@@ -82,15 +106,14 @@ public class PlayerController : MonoBehaviour
         manager.livesPanel.GetComponent<LivesController>().LoseLife();
 
         if (currentLives <= 0)
-        {
             manager.PlayerDead();
-        }
     }
 
     public Vector2 FacingDirection()
     {
         if (h > 0) return Vector2.right;
         if (h < 0) return Vector2.left;
+        // Mantém direção anterior ou padrão para a direita
         return Vector2.right;
     }
 
