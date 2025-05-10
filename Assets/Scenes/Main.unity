@@ -188,6 +188,14 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 9169291802119221384, guid: c17c2c5c9441f60eea3fa5424572044b, type: 3}
+      propertyPath: maxX
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169291802119221384, guid: c17c2c5c9441f60eea3fa5424572044b, type: 3}
+      propertyPath: minX
+      value: -12
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169291802119221384, guid: c17c2c5c9441f60eea3fa5424572044b, type: 3}
       propertyPath: bulletPrefab
       value: 
       objectReference: {fileID: 5129288296243035912, guid: ab70532d6c822115289f9cb8f80fa191, type: 3}
@@ -304,7 +312,8 @@ MonoBehaviour:
   - {fileID: 8692895689646534373, guid: 1affed43512a76c00bcfeb941731d169, type: 3}
   - {fileID: 9159945350535842787, guid: 35cdcfba433b375168c7c4f3ed697053, type: 3}
   - {fileID: 4569468195835422013, guid: 08a87be954525c8ca9e735ab9d42844c, type: 3}
-  spawnInterval: 2
+  initialSpawnInterval: 2
+  minSpawnInterval: 0.5
 --- !u!4 &501308054
 Transform:
   m_ObjectHideFlags: 0
