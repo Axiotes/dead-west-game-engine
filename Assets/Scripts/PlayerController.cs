@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("IsShooting", false);
         anim.ResetTrigger("TakeDamage");
         anim.SetBool("IsDead", false);
+        anim.Play("Idle");
     }
 
     public void ResetPlayer()
