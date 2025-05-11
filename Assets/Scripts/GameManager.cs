@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // Inicia ao clicar/tocar em qualquer lugar
         if (!isPlaying && Input.anyKeyDown)
             StartGame();
     }
@@ -52,20 +51,17 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDead()
     {
-        // Para de spawnar novos zumbis
         zombieSpawner.SetActive(false);
-
-        // Remove todos os zumbis atualmente na cena
+        
         GameObject[] allZombies = GameObject.FindGameObjectsWithTag("Zombie");
         foreach (GameObject z in allZombies)
         {
             Destroy(z);
         }
-
-        // Animação de morte do jogador
+        
         player.Die();
 
-        // Transição para Game Over
+        
         StartCoroutine(ShowGameOver());
     }
 

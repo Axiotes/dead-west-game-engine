@@ -189,11 +189,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9169291802119221384, guid: c17c2c5c9441f60eea3fa5424572044b, type: 3}
       propertyPath: maxX
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 9169291802119221384, guid: c17c2c5c9441f60eea3fa5424572044b, type: 3}
       propertyPath: minX
-      value: -12
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 9169291802119221384, guid: c17c2c5c9441f60eea3fa5424572044b, type: 3}
       propertyPath: bulletPrefab

@@ -11,15 +11,29 @@ public class Zombie : MonoBehaviour
     void Awake()
     {
         anim = GetComponent<Animator>();
-        player = FindObjectOfType<PlayerController>().transform;
+
+        PlayerController pc = Object.FindFirstObjectByType<PlayerController>();
+        if (pc != null)
+        {
+            player = pc.transform;
+        }
+        else
+        {
+            Debug.LogError("PlayerController não encontrado na cena! Verifique se o objeto Player está ativo e possui o script PlayerController.");
+        }
     }
 
     void Update()
     {
+        if (player == null) return;
+
         Vector3 dir = (player.position - transform.position).normalized;
         transform.Translate(dir * speedFactor * Time.deltaTime);
-        // animação de acordo com x
-        anim.Play(dir.x >= 0 ? $"ZombieLevel{level}Right" : $"ZombieLevel{level}Left");
+
+        string state = dir.x >= 0
+            ? $"ZombieLevel{level}Right"
+            : $"ZombieLevel{level}Left";
+        anim.Play(state);
     }
 
     public void TakeHit()
@@ -32,6 +46,6 @@ public class Zombie : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
-            col.GetComponent<PlayerController>().TakeDamage();
+            col.GetComponent<PlayerController>()?.TakeDamage();
     }
 }

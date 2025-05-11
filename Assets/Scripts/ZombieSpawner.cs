@@ -6,16 +6,15 @@ public class ZombieSpawner : MonoBehaviour
     public GameObject[] zombiePrefabs;
 
     [Header("Configuração de Spawn")]
-    public float initialSpawnInterval = 2f;    // intervalo inicial entre spawns
-    public float minSpawnInterval     = 0.5f;  // intervalo mínimo conforme dificuldade
+    public float initialSpawnInterval = 2f;
+    public float minSpawnInterval = 0.5f;
 
-    private float spawnInterval;  // intervalo atual (é reduzido ao longo do tempo)
-    private float timer;          // contador para o próximo spawn
-    private float elapsed;        // tempo desde o último aumento de dificuldade
+    private float spawnInterval;
+    private float timer;
+    private float elapsed;
 
     void Awake()
     {
-        // Sempre que o spawner “nascer”, já zera seu estado
         ResetSpawner();
     }
 
@@ -38,14 +37,12 @@ public class ZombieSpawner : MonoBehaviour
         elapsed += Time.deltaTime;
         timer   += Time.deltaTime;
 
-        // Se passou o intervalo atual, spawn
         if (timer >= spawnInterval)
         {
             Spawn();
             timer = 0f;
         }
 
-        // A cada 30s, reduz o intervalo (até o mínimo)
         if (elapsed >= 30f && spawnInterval > minSpawnInterval)
         {
             spawnInterval = Mathf.Max(minSpawnInterval, spawnInterval - 0.2f);
@@ -55,13 +52,11 @@ public class ZombieSpawner : MonoBehaviour
 
     void Spawn()
     {
-        // escolhe canto aleatório
         int side = Random.Range(0, 4);
         float x = side < 2 ? -10f : 10f;
         float y = (side % 2) == 0 ? -5f : 5f;
         Vector2 pos = new Vector2(x, y);
 
-        // escolhe level baseado no tempo do jogo
         float t = Time.timeSinceLevelLoad;
         int idx = t < 30f 
                   ? 0 

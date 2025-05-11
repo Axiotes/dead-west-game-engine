@@ -4,24 +4,27 @@ public class Bullet : MonoBehaviour
 {
     public float speed = 10f;
     private Vector2 dir;
-    private PlayerController owner;
 
-    public void Init(PlayerController pc)
+    /// <summary>
+    /// Inicializa a bala com a direção de movimento.
+    /// </summary>
+    public void Init(Vector2 direction)
     {
-        owner = pc;
-        dir = pc.FacingDirection();
+        dir = direction.normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     void Update()
     {
-        transform.Translate(dir * speed * Time.deltaTime);
+        transform.Translate(dir * speed * Time.deltaTime, Space.World);
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Zombie"))
         {
-            col.GetComponent<Zombie>().TakeHit();
+            col.GetComponent<Zombie>()?.TakeHit();
             Destroy(gameObject);
         }
     }
